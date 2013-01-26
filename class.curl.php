@@ -5,28 +5,31 @@
  * @package curl
  * @author Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link https://github.com/zelenin/curl
- * @version 0.1
+ * @version 0.2
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
-if ( !class_exists( 'curl' ) ) :
+namespace zelenin;
 
 class curl {
 
-	const version = '0.1';
-	public $error = false;
+	const version = '0.2';
 	protected $request;
-
-	public $user_agent;
-	public $cookie;
+	private $user_agent;
+	private $cookie;
 
 	public function __construct() {
 		$this->user_agent = 'curl ' . self::version . ' (https://github.com/zelenin/curl)';
-		$this->cookie = dirname( __FILE__ ) . '/cookie.txt';
 	}
 
-	public function request( $url, $post_data = false ) {
+	private function request( $url, $data = null, $method = 'get',  $headers = null, $cookie = null ) {
 
+		if ( !function_exists( 'curl_init' ) ) return 'No curl';
+		if ( !$url ) return 'Wrong URL';
+
+		if ( $method == 'get' && $data ) {
+			$url = is_array( $data ) ? trim( $url, '/' ) . '/?' . http_build_query( $data ) : trim( $url, '/' ) . '/?' . $data;
+		}
 		$this->request = curl_init( $url );
 
 		$options = array(
@@ -34,24 +37,29 @@ class curl {
 			CURLOPT_NOBODY => false,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_USERAGENT => $this->user_agent,
-			CURLOPT_COOKIEFILE => $this->cookie,
-			CURLOPT_COOKIEJAR => $this->cookie,
 			CURLOPT_SSL_VERIFYPEER => false
 		);
 
-		if ( $post_data )
-			$options[CURLOPT_POSTFIELDS] = is_array( $post_data ) ? http_build_query( $post_data ) : $post_data;
+		if ( $method == 'post' && $data ) {
+			$options[CURLOPT_POSTFIELDS] = is_array( $data ) ? http_build_query( $data ) : $data;
+		}
+
+		if ( $headers )
+			$options[CURLOPT_HTTPHEADER] = $headers;
+
+		if ( $cookie ) {
+			$options[CURLOPT_COOKIEFILE] = $cookie;
+			$options[CURLOPT_COOKIEJAR] = $cookie;
+		}
 
 		curl_setopt_array( $this->request, $options );
 		$result = curl_exec( $this->request );
 
 		if ( $result ) {
-			$this->error = false;
 			$info = curl_getinfo( $this->request );
 			$response = $this->parse_response( $result );
 			$response['info'] = $info;
 		} else {
-			$this->error = true;
 			$response = array(
 				'number' => curl_errno( $this->request ),
 				'error' => curl_error( $this->request )
@@ -63,8 +71,12 @@ class curl {
 
 	}
 
-	public function error() {
-		return $this->error;
+	public function get( $url, $data = null, $headers = null, $cookie = null ) {
+		return $this->request( $url, $data, $method = 'get',  $headers, $cookie );
+	}
+
+	public function post( $url, $data = null, $headers = null, $cookie = null ) {
+		return $this->request( $url, $data, $method = 'post',  $headers, $cookie );
 	}
 
 	private function parse_response( $response ) {
@@ -87,8 +99,11 @@ class curl {
 
     }
 
-}
+	public function set_user_agent( $user_agent ) {
+		$this->user_agent = $user_agent;
+	}
 
-endif;
+
+}
 
 ?>

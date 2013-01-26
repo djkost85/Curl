@@ -5,27 +5,48 @@ Very simple CURL wrapper for PHP ([http://php.net/curl](http://php.net/curl)). T
 ## Usage
 
 	require_once 'class.curl.php';
-	$curl = new curl;
+	$curl = new zelenin\curl;
 
-Optionally you may set user-agent and cookie file path:
+Optionally you may set user-agent:
 
-	$curl->user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0';
-	$curl->cookie = dirname( __FILE__ ) . '/curl.cookie.txt';
-
-You must set a POST data for POST request:
-
-	$post_data = array(
-		'key_one' => 'value_one',
-		'key_two' => 'value_two'
-	);
+	$curl->set_user_agent( 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0' );
 
 GET request:
 
-	$response = $curl->request( 'http://example.com/' );
+	$response = $curl->get( 'http://example.com/' );
+
+or:
+
+	$response = $curl->get( 'http://example.com/?key_one=value_one&key_two=value_two' );
+
+or:
+
+	$data = array(
+		'key_one' => 'value_one',
+		'key_two' => 'value_two'
+	);
+	$response = $curl->get( 'http://example.com/', $data );
 
 POST request:
 
-	$response = $curl->request( 'http://example.com/', $post_data );
+	$data = array(
+		'key_one' => 'value_one',
+		'key_two' => 'value_two'
+	);
+	$response = $curl->post( 'http://example.com/', $data );
+
+or:
+
+	$response = $curl->post( 'http://example.com/', 'key_one=value_one&key_two=value_two' );
+
+Headers and cookies:
+
+	$headers = array(
+		'HeaderName: HeaderValue',
+		'HeaderName2: HeaderValue2'
+	);
+	$response = $curl->get( 'http://example.com/', null, $headers, dirname(__FILE__) . '/cookie.txt' );
+	$response = $curl->post( 'http://example.com/', null, $headers, dirname(__FILE__) . '/cookie.txt' );
 
 
 ## Response
