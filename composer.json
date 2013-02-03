@@ -1,10 +1,16 @@
 {
     "name": "zelenin/curl",
     "description": "A simple CURL wrapper for PHP",
-    "authors": [
+	"keywords": ["curl"],
+	"homepage": "https://github.com/zelenin/curl/",
+	"authors": [
         {
             "name": "Aleksandr Zelenin",
             "email": "aleksandr@zelenin.me"
         }
-    ]
+    ],
+	"require": {
+		"php": ">=5.3.0"
+	},
+	"license": "GNU GPL 3",
 }
