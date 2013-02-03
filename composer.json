@@ -1,0 +1,10 @@
+{
+    "name": "zelenin/curl",
+    "description": "A simple CURL wrapper for PHP",
+    "authors": [
+        {
+            "name": "Aleksandr Zelenin",
+            "email": "aleksandr@zelenin.me"
+        }
+    ]
+}
