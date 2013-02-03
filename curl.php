@@ -103,7 +103,6 @@ class curl {
 		$this->user_agent = $user_agent;
 	}
 
-
 }
 
 ?>

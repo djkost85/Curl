@@ -4,8 +4,8 @@ Very simple CURL wrapper for PHP ([http://php.net/curl](http://php.net/curl)). T
 
 ## Usage
 
-	require_once 'class.curl.php';
-	$curl = new zelenin\curl;
+	require_once 'curl.php';
+	$curl = new \zelenin\curl;
 
 Optionally you may set user-agent:
 

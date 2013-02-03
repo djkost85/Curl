@@ -2,9 +2,9 @@
 
 echo '<pre>';
 
-require_once 'class.curl.php';
+require_once 'curl.php';
 
-$curl = new zelenin\curl;
+$curl = new \zelenin\curl;
 $curl->set_user_agent( 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0' );
 
 $data = array(
