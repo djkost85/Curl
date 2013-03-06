@@ -4,8 +4,8 @@ Very simple CURL wrapper for PHP ([http://php.net/curl](http://php.net/curl)). T
 
 ## Usage
 
-	require_once 'curl.php';
-	$curl = new \zelenin\curl;
+	require_once 'Curl.php';
+	$curl = new \Zelenin\Curl;
 
 Optionally you may set user-agent:
 
@@ -20,12 +20,12 @@ or:
 	$response = $curl->get( 'http://example.com/?key_one=value_one&key_two=value_two' );
 
 or:
-
+	$user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0';
 	$data = array(
 		'key_one' => 'value_one',
 		'key_two' => 'value_two'
 	);
-	$response = $curl->get( 'http://example.com/', $data );
+	$response = $curl->set_user_agent( $user_agent )->get 'http://example.com/', $data, $headers = null, $cookie = null );
 
 POST request:
 
