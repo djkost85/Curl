@@ -1,4 +1,4 @@
-# curl
+# Curl
 
 Very simple CURL wrapper for PHP ([http://php.net/curl](http://php.net/curl)). The class supports only GET and POST methods. Also it supports cookie and https.
 
