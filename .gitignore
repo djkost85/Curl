@@ -2,3 +2,5 @@
 index.php
 cookie.txt
 curl.cookie.txt
+.gitignore
+.git

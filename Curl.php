@@ -4,8 +4,8 @@
  * A simple curl wrapper
  * @package Curl
  * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
- * @link    https://github.com/zelenin/curl
- * @version 0.3
+ * @link    https://github.com/zelenin/Curl
+ * @version 0.3.0
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
@@ -13,14 +13,30 @@ namespace Zelenin;
 
 class Curl
 {
-	const VERSION = '0.3';
-	protected $request;
+	const VERSION = '0.3.0';
+	private $request;
 	private $user_agent;
 
 	public function __construct()
 	{
 		if ( !function_exists( 'curl_init' ) ) return false;
 		return $this->set_user_agent( 'Curl ' . self::VERSION . ' (https://github.com/zelenin/curl)' );
+	}
+
+	public function set_user_agent( $user_agent )
+	{
+		$this->user_agent = $user_agent;
+		return $this;
+	}
+
+	public function get( $url, $data = null, $headers = null, $cookie = null )
+	{
+		return $this->request( $url, $data, $method = 'get', $headers, $cookie );
+	}
+
+	public function post( $url, $data = null, $headers = null, $cookie = null )
+	{
+		return $this->request( $url, $data, $method = 'post', $headers, $cookie );
 	}
 
 	private function request( $url, $data = null, $method = 'get', $headers = null, $cookie = null )
@@ -70,16 +86,6 @@ class Curl
 		return $response;
 	}
 
-	public function get( $url, $data = null, $headers = null, $cookie = null )
-	{
-		return $this->request( $url, $data, $method = 'get', $headers, $cookie );
-	}
-
-	public function post( $url, $data = null, $headers = null, $cookie = null )
-	{
-		return $this->request( $url, $data, $method = 'post', $headers, $cookie );
-	}
-
 	private function parse_response( $response )
 	{
 		$response_parts = explode( "\r\n\r\n", $response, 2 );
@@ -98,11 +104,5 @@ class Curl
 		}
 		$response['body'] = $response_parts[1];
 		return $response;
-	}
-
-	public function set_user_agent( $user_agent )
-	{
-		$this->user_agent = $user_agent;
-		return $this;
 	}
 }
