@@ -2,7 +2,7 @@
 
 echo '<pre>';
 
-require_once 'Curl.php';
+require_once 'lib/Zelenin/Curl.php';
 
 $curl = new \Zelenin\Curl;
 
