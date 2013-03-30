@@ -15,6 +15,6 @@
 		"psr-0": { "Zelenin": "lib/" }
 	},
 	"keywords": [ "curl", "http" ],
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"homepage": "https://github.com/zelenin/Curl"
 }
