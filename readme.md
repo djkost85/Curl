@@ -9,7 +9,7 @@ Very simple CURL wrapper for PHP ([http://php.net/curl](http://php.net/curl)). T
 
 Optionally you may set user-agent:
 
-	$curl->set_user_agent( 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0' );
+	$curl->setUserAgent( 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0' );
 
 GET request:
 
@@ -25,7 +25,7 @@ or:
 		'key_one' => 'value_one',
 		'key_two' => 'value_two'
 	);
-	$response = $curl->set_user_agent( $user_agent )->get 'http://example.com/', $data, $headers = null, $cookie = null );
+	$response = $curl->setUserAgent( $user_agent )->get 'http://example.com/', $data, $headers = null, $cookie = null );
 
 POST request:
 
@@ -38,6 +38,14 @@ POST request:
 or:
 
 	$response = $curl->post( 'http://example.com/', 'key_one=value_one&key_two=value_two' );
+
+DELETE request:
+
+	$data = array(
+		'key_one' => 'value_one',
+		'key_two' => 'value_two'
+	);
+	$response = $curl->delete( 'http://example.com/', $data );
 
 Headers and cookies:
 
