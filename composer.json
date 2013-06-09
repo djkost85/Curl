@@ -14,6 +14,7 @@
 	"autoload": {
 		"psr-0": { "Zelenin": "lib/" }
 	},
+	"license": "GPL-3.0",
 	"keywords": [ "curl", "http" ],
 	"version": "0.4.0",
 	"homepage": "https://github.com/zelenin/Curl"

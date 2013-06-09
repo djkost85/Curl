@@ -11,6 +11,6 @@ $data = array(
 	'key_one' => 'value_one',
 	'key_two' => 'value_two'
 );
-$response = $curl->setUserAgent( $user_agent )->get( 'http://thatif.ru/', $data, $headers = null, $cookie = null );
+$response = $curl->setUserAgent( $user_agent )->setTimeout( 1 )->get( 'http://ya.ru/', $data, $headers = null, $cookie = null );
 
 print_r( $response['body'] );

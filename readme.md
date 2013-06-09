@@ -11,6 +11,10 @@ Optionally you may set user-agent:
 
 	$curl->setUserAgent( 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0' );
 
+Optional timeout:
+
+	$curl->setTimeout( 10 );
+
 GET request:
 
 	$response = $curl->get( 'http://example.com/' );
@@ -25,7 +29,7 @@ or:
 		'key_one' => 'value_one',
 		'key_two' => 'value_two'
 	);
-	$response = $curl->setUserAgent( $user_agent )->get 'http://example.com/', $data, $headers = null, $cookie = null );
+	$response = $curl->setUserAgent( $user_agent )->setTimeout( 10 )->get( 'http://example.com/', $data, $headers = null, $cookie = null );
 
 POST request:
 

@@ -6,7 +6,7 @@
  * @package Curl
  * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link    https://github.com/zelenin/Curl
- * @version 0.4.0
+ * @version 0.4.1
  * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
  */
 
@@ -14,9 +14,10 @@ namespace Zelenin;
 
 class Curl
 {
-	const VERSION = '0.4.0';
+	const VERSION = '0.4.1';
 	private $_request;
 	private $_user_agent;
+	private $_timeout = 30;
 
 	public function __construct()
 	{
@@ -27,6 +28,12 @@ class Curl
 	public function setUserAgent( $user_agent )
 	{
 		$this->_user_agent = $user_agent;
+		return $this;
+	}
+
+	public function setTimeout( $timeout )
+	{
+		$this->_timeout = $timeout;
 		return $this;
 	}
 
@@ -45,6 +52,11 @@ class Curl
 		return $this->_request( $url, $data, $method = 'delete', $headers, $cookie );
 	}
 
+	public function put( $url, $data = null, $headers = null, $cookie = null )
+	{
+		return $this->_request( $url, $data, $method = 'put', $headers, $cookie );
+	}
+
 	private function _request( $url, $data = null, $method = 'get', $headers = null, $cookie = null )
 	{
 		if ( !$url ) return false;
@@ -55,12 +67,17 @@ class Curl
 		if ( $method == 'delete' && $data ) {
 			$url = is_array( $data ) ? trim( $url, '/' ) . '/?' . http_build_query( $data ) : trim( $url, '/' ) . '/?' . $data;
 		}
+		if ( $method == 'put' && $data ) {
+			$url = is_array( $data ) ? trim( $url, '/' ) . '/?' . http_build_query( $data ) : trim( $url, '/' ) . '/?' . $data;
+		}
 		$this->_request = curl_init( $url );
 
 		$options = array(
 			CURLOPT_HEADER => true,
 			CURLOPT_NOBODY => false,
 			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT => $this->_timeout,
+			CURLOPT_CONNECTTIMEOUT => $this->_timeout,
 			CURLOPT_USERAGENT => $this->_user_agent,
 			CURLOPT_SSL_VERIFYPEER => false
 		);
@@ -71,6 +88,10 @@ class Curl
 
 		if ( $method == 'delete' ) {
 			$options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+		}
+
+		if ( $method == 'put' ) {
+			$options[CURLOPT_PUT] = true;
 		}
 
 		if ( $headers ) {
