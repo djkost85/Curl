@@ -1,8 +1,6 @@
 <?php
 
-echo '<pre>';
-
-require_once 'lib/Zelenin/Curl.php';
+require_once 'vendor/autoload.php';
 
 $curl = new \Zelenin\Curl;
 

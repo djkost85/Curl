@@ -1,21 +1,31 @@
 {
 	"name": "zelenin/curl",
 	"description": "Simple CURL wrapper for PHP",
-	"minimum-stability": "stable",
+	"version": "0.4.1",
+	"type": "library",
+	"keywords": ["curl", "http"],
+	"homepage": "https://github.com/zelenin/VK",
+	"time": "2013-08-28",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Aleksandr Zelenin",
-			"email": "aleksandr@zelenin.me"
+			"email": "aleksandr@zelenin.me",
+			"homepage": "http://zelenin.me",
+			"role": "Developer"
 		}
 	],
+	"support": {
+		"issues": "https://github.com/zelenin/Curl/issues",
+		"source": "https://github.com/zelenin/Curl"
+	},
 	"require": {
 		"php": ">=5.3.0"
 	},
 	"autoload": {
-		"psr-0": { "Zelenin": "lib/" }
+		"psr-0": {
+			"Zelenin\\": "src/"
+		}
 	},
-	"license": "GPL-3.0",
-	"keywords": [ "curl", "http" ],
-	"version": "0.4.0",
-	"homepage": "https://github.com/zelenin/Curl"
+	"minimum-stability": "stable"
 }

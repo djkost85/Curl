@@ -6,15 +6,15 @@
  * @package Curl
  * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link    https://github.com/zelenin/Curl
- * @version 0.4.1
- * @license http://opensource.org/licenses/gpl-3.0.html GPL-3.0
+ * @license MIT
+ * @version 0.4.2
  */
 
 namespace Zelenin;
 
 class Curl
 {
-	const VERSION = '0.4.1';
+	const VERSION = '0.4.2';
 	private $_request;
 	private $_user_agent;
 	private $_timeout = 30;
@@ -62,13 +62,13 @@ class Curl
 		if ( !$url ) return false;
 
 		if ( $method == 'get' && $data ) {
-			$url = is_array( $data ) ? trim( $url, '/' ) . '/?' . http_build_query( $data ) : trim( $url, '/' ) . '/?' . $data;
+			$url = is_array( $data ) ? trim( $url, '/' ) . '?' . http_build_query( $data ) : trim( $url, '/' ) . '?' . $data;
 		}
 		if ( $method == 'delete' && $data ) {
-			$url = is_array( $data ) ? trim( $url, '/' ) . '/?' . http_build_query( $data ) : trim( $url, '/' ) . '/?' . $data;
+			$url = is_array( $data ) ? trim( $url, '/' ) . '?' . http_build_query( $data ) : trim( $url, '/' ) . '?' . $data;
 		}
 		if ( $method == 'put' && $data ) {
-			$url = is_array( $data ) ? trim( $url, '/' ) . '/?' . http_build_query( $data ) : trim( $url, '/' ) . '/?' . $data;
+			$url = is_array( $data ) ? trim( $url, '/' ) . '?' . http_build_query( $data ) : trim( $url, '/' ) . '?' . $data;
 		}
 		$this->_request = curl_init( $url );
 

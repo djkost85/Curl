@@ -4,7 +4,6 @@ Very simple CURL wrapper for PHP ([http://php.net/curl](http://php.net/curl)). T
 
 ## Usage
 
-	require_once 'lib/Zelenin/Curl.php';
 	$curl = new \Zelenin\Curl;
 
 Optionally you may set user-agent:
