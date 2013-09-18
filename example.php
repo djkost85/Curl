@@ -9,6 +9,19 @@ $data = array(
 	'key_one' => 'value_one',
 	'key_two' => 'value_two'
 );
-$response = $curl->setUserAgent( $user_agent )->setTimeout( 1 )->get( 'http://ya.ru/', $data, $headers = null, $cookie = null );
+$cookies = array(
+	'cookie_name_1: cookie_value_1',
+	'cookie_name_2: cookie_value_2'
+);
+$headers = array(
+	'header_name_1: header_value_1',
+	'header_name_2: header_value_2'
+);
 
-print_r( $response['body'] );
+$response = $curl
+	->setUserAgent( $user_agent )
+	->setTimeout( 10 )
+	->setCookieFile( dirname( __FILE__ ) . '/cookie.txt' )
+	->post( 'http://home.zelenin.me/Curl/test.php', $data, $headers, $cookies );
+
+print_r( $response );

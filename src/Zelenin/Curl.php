@@ -7,116 +7,150 @@
  * @author  Aleksandr Zelenin <aleksandr@zelenin.me>
  * @link    https://github.com/zelenin/Curl
  * @license MIT
- * @version 0.4.2
+ * @version 0.5.0
  */
 
 namespace Zelenin;
 
 class Curl
 {
-	const VERSION = '0.4.2';
-	private $_request;
-	private $_user_agent;
-	private $_timeout = 30;
+	const VERSION = '0.5.0';
+
+	const GET = 'GET';
+	const POST = 'POST';
+	const PUT = 'PUT';
+	const DELETE = 'DELETE';
+	const HEAD = 'HEAD';
+	const CONNECT = 'CONNECT';
+	const OPTION = 'OPTION';
+	const PATCH = 'PATCH';
+
+	private $request;
+	private $user_agent;
+	private $timeout;
+	private $cookie_file = null;
 
 	public function __construct()
 	{
-		if ( !function_exists( 'curl_init' ) ) return false;
-		return $this->setUserAgent( 'Curl ' . self::VERSION . ' (https://github.com/zelenin/curl)' );
+		$this->setUserAgent( 'Curl ' . self::VERSION . ' (https://github.com/zelenin/Curl)' );
+		$this->setTimeout( 30 );
 	}
 
 	public function setUserAgent( $user_agent )
 	{
-		$this->_user_agent = $user_agent;
+		$this->user_agent = $user_agent;
 		return $this;
 	}
 
 	public function setTimeout( $timeout )
 	{
-		$this->_timeout = $timeout;
+		$this->timeout = $timeout;
+		return $this;
+	}
+
+	public function setCookieFile( $cookie_file )
+	{
+		$this->cookie_file = $cookie_file;
 		return $this;
 	}
 
 	public function get( $url, $data = null, $headers = null, $cookie = null )
 	{
-		return $this->_request( $url, $data, $method = 'get', $headers, $cookie );
+		return $this->request( $url, $data, $method = self::GET, $headers, $cookie );
 	}
 
 	public function post( $url, $data = null, $headers = null, $cookie = null )
 	{
-		return $this->_request( $url, $data, $method = 'post', $headers, $cookie );
-	}
-
-	public function delete( $url, $data = null, $headers = null, $cookie = null )
-	{
-		return $this->_request( $url, $data, $method = 'delete', $headers, $cookie );
+		return $this->request( $url, $data, $method = self::POST, $headers, $cookie );
 	}
 
 	public function put( $url, $data = null, $headers = null, $cookie = null )
 	{
-		return $this->_request( $url, $data, $method = 'put', $headers, $cookie );
+		return $this->request( $url, $data, $method = self::PUT, $headers, $cookie );
 	}
 
-	private function _request( $url, $data = null, $method = 'get', $headers = null, $cookie = null )
+	public function delete( $url, $data = null, $headers = null, $cookie = null )
 	{
-		if ( !$url ) return false;
+		return $this->request( $url, $data, $method = self::DELETE, $headers, $cookie );
+	}
 
-		if ( $method == 'get' && $data ) {
-			$url = is_array( $data ) ? trim( $url, '/' ) . '?' . http_build_query( $data ) : trim( $url, '/' ) . '?' . $data;
+	public function head( $url, $data = null, $headers = null, $cookie = null )
+	{
+		return $this->request( $url, $data, $method = self::HEAD, $headers, $cookie );
+	}
+
+	public function connect( $url, $data = null, $headers = null, $cookie = null )
+	{
+		return $this->request( $url, $data, $method = self::CONNECT, $headers, $cookie );
+	}
+
+	public function option( $url, $data = null, $headers = null, $cookie = null )
+	{
+		return $this->request( $url, $data, $method = self::OPTION, $headers, $cookie );
+	}
+
+	public function patch( $url, $data = null, $headers = null, $cookie = null )
+	{
+		return $this->request( $url, $data, $method = self::PATCH, $headers, $cookie );
+	}
+
+	private function request( $url, $data = null, $method, $headers = null, $cookie = null )
+	{
+		if ( $method == self::GET && $data ) {
+			$url = trim( $url, '/' ) . '?';
+			$url .= is_array( $data ) ? http_build_query( $data ) : $data;
 		}
-		if ( $method == 'delete' && $data ) {
-			$url = is_array( $data ) ? trim( $url, '/' ) . '?' . http_build_query( $data ) : trim( $url, '/' ) . '?' . $data;
-		}
-		if ( $method == 'put' && $data ) {
-			$url = is_array( $data ) ? trim( $url, '/' ) . '?' . http_build_query( $data ) : trim( $url, '/' ) . '?' . $data;
-		}
-		$this->_request = curl_init( $url );
+
+		$this->request = curl_init( $url );
 
 		$options = array(
+			CURLOPT_CUSTOMREQUEST => $method,
 			CURLOPT_HEADER => true,
 			CURLOPT_NOBODY => false,
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT => $this->_timeout,
-			CURLOPT_CONNECTTIMEOUT => $this->_timeout,
-			CURLOPT_USERAGENT => $this->_user_agent,
+			CURLOPT_TIMEOUT => $this->timeout,
+			CURLOPT_CONNECTTIMEOUT => $this->timeout,
+			CURLOPT_USERAGENT => $this->user_agent,
 			CURLOPT_SSL_VERIFYPEER => false
 		);
 
-		if ( ( $method == 'post' ) && $data ) {
+		if ( $data && $method != self::GET ) {
 			$options[CURLOPT_POSTFIELDS] = is_array( $data ) ? http_build_query( $data ) : $data;
-		}
-
-		if ( $method == 'delete' ) {
-			$options[CURLOPT_CUSTOMREQUEST] = 'DELETE';
-		}
-
-		if ( $method == 'put' ) {
-			$options[CURLOPT_PUT] = true;
 		}
 
 		if ( $headers ) {
 			$options[CURLOPT_HTTPHEADER] = $headers;
 		}
 
-		if ( $cookie ) {
-			$options[CURLOPT_COOKIEFILE] = $cookie;
-			$options[CURLOPT_COOKIEJAR] = $cookie;
+		if ( $this->cookie_file ) {
+			$options[CURLOPT_COOKIEFILE] = $this->cookie_file;
+			$options[CURLOPT_COOKIEJAR] = $this->cookie_file;
 		}
-		curl_setopt_array( $this->_request, $options );
-		$result = curl_exec( $this->_request );
+
+		if ( $cookie ) {
+			$option[CURLOPT_COOKIE] = $this->prepareCookie( $cookie );
+		}
+
+		curl_setopt_array( $this->request, $options );
+		$result = curl_exec( $this->request );
 
 		if ( $result ) {
-			$info = curl_getinfo( $this->_request );
+			$info = curl_getinfo( $this->request );
 			$response = $this->parseResponse( $result );
 			$response['info'] = $info;
 		} else {
 			$response = array(
-				'number' => curl_errno( $this->_request ),
-				'error' => curl_error( $this->_request )
+				'number' => curl_errno( $this->request ),
+				'error' => curl_error( $this->request )
 			);
 		}
-		curl_close( $this->_request );
+		curl_close( $this->request );
 		return $response;
+	}
+
+	private function prepareCookie( $cookies )
+	{
+		return implode( '; ', $cookies );
 	}
 
 	private function parseResponse( $response )

@@ -1,6 +1,6 @@
 # Curl
 
-Very simple CURL wrapper for PHP ([http://php.net/curl](http://php.net/curl)). The class supports only GET and POST methods. Also it supports cookie and https.
+CURL wrapper for PHP ([http://php.net/curl](http://php.net/curl)).
 
 ## Usage
 
@@ -22,44 +22,42 @@ or:
 
 	$response = $curl->get( 'http://example.com/?key_one=value_one&key_two=value_two' );
 
-or:
+POST request (with POST data, headers and cookies):
 
 	$user_agent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0';
 	$data = array(
-		'key_one' => 'value_one',
-		'key_two' => 'value_two'
-	);
-	$response = $curl->setUserAgent( $user_agent )->setTimeout( 10 )->get( 'http://example.com/', $data, $headers = null, $cookie = null );
-
-POST request:
-
-	$data = array(
-		'key_one' => 'value_one',
-		'key_two' => 'value_two'
-	);
-	$response = $curl->post( 'http://example.com/', $data );
+    	'key_one' => 'value_one',
+    	'key_two' => 'value_two'
+    );
+    $cookies = array(
+    	'key_one: value_one',
+    	'key_two: value_two'
+    );
+    $headers = array(
+    	'key_one: value_one',
+    	'key_two: value_two'
+    );
+	$response = $curl
+    	->setUserAgent( $user_agent )
+    	->setTimeout( 10 )
+    	->setCookieFile( dirname( __FILE__ ) . '/cookie.txt' )
+    	->post( 'http://home.zelenin.me/Curl/test.php', $data, $headers, $cookies );
 
 or:
 
-	$response = $curl->post( 'http://example.com/', 'key_one=value_one&key_two=value_two' );
+	$response = $curl
+		->setUserAgent( $user_agent )
+        ->setTimeout( 10 )
+        ->setCookieFile( dirname( __FILE__ ) . '/cookie.txt' )
+        ->post( 'http://home.zelenin.me/Curl/test.php', 'key_one=value_one&key_two=value_two', $headers, $cookies );
 
-DELETE request:
+PUT request (same as DELETE, HEAD, CONNECT, OPTION, PATCH):
 
 	$data = array(
 		'key_one' => 'value_one',
 		'key_two' => 'value_two'
 	);
-	$response = $curl->delete( 'http://example.com/', $data );
-
-Headers and cookies:
-
-	$headers = array(
-		'HeaderName: HeaderValue',
-		'HeaderName2: HeaderValue2'
-	);
-	$response = $curl->get( 'http://example.com/', null, $headers, dirname(__FILE__) . '/cookie.txt' );
-	$response = $curl->post( 'http://example.com/', null, $headers, dirname(__FILE__) . '/cookie.txt' );
-
+	$response = $curl->put( 'http://example.com/', $data );
 
 ## Response
 
@@ -81,8 +79,8 @@ On error:
 
 ## Development
 
-- Source hosted at [GitHub](https://github.com/zelenin/curl)
-- Report issues, questions, feature requests on [GitHub Issues](https://github.com/zelenin/curl/issues)
+- Source hosted at [GitHub](https://github.com/zelenin/Curl)
+- Report issues, questions, feature requests on [GitHub Issues](https://github.com/zelenin/Curl/issues)
 
 ## Author
 
